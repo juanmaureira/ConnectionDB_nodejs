@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 
-const { getUsers } = require("./controllers");
+const { getUsers, loginUsers } = require("./controllers");
 const {
   useMiddleWareUnless,
   authenticate,
@@ -19,8 +19,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../../public")));
 
 app.use(useMiddleWareUnless(["/", "/login", "/register"], authenticate)); // Authenticate
-app.use(useMiddleWareUnless(["/", "/login", "/register"]), authorize); // Authorize
+app.use(useMiddleWareUnless(["/", "/login", "/register"], authorize)); // Authorize
 
 app.listen(port, () => console.log(`Server ruinning at port ${port}`));
 
+app.post("/login", loginUsers);
 app.get("/users", getUsers);
